@@ -1,22 +1,27 @@
-import { Link } from "react-router-dom";
-
-function Navbar() {
-  return (
-    <nav style={{ padding: "10px", backgroundColor: "#f0f0f0" }}>
-      <Link to="/" style={{ marginRight: "10px", textDecoration: "none" }}>
-        Home
-      </Link>
-      <Link to="/services" style={{ marginRight: "10px", textDecoration: "none" }}>
-        Services
-      </Link>
-      <Link to="/booking" style={{ marginRight: "10px", textDecoration: "none" }}>
-        Booking
-      </Link>
-      <Link to="/login" style={{ textDecoration: "none" }}>
-        Login
-      </Link>
-    </nav>
-  );
+/* Navbar container */
+nav {
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
 }
 
-export default Navbar;
+/* Links inside the navbar */
+nav a {
+  margin-right: 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Hover effect for links */
+nav a:hover {
+  color: #007bff;
+}
+
+/* Optional: last link has no margin */
+nav a:last-child {
+  margin-right: 0;
+}
+
