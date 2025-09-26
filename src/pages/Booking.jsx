@@ -3,6 +3,8 @@ import { useState } from "react";
 function Booking() {
   const [service, setService] = useState("");
   const [date, setDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const servicesList = [
     "Haircut",
@@ -16,29 +18,59 @@ function Booking() {
 
   const handleBooking = async (e) => {
     e.preventDefault();
+
     const email = localStorage.getItem("userEmail");
-    if (!service || !date) return alert("Select service and date");
+    if (!email) {
+      setMessage("❌ You must be logged in to book.");
+      return;
+    }
+
+    if (!service || !date) {
+      setMessage("❌ Please select a service and date.");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
 
     const bookingData = { email, service, date };
 
     try {
-      const res = await fetch("http://localhost:5000/book", {
+      const res = await fetch("http://localhost:4000/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),
       });
+
       const data = await res.json();
-      if (data.success) alert("Booking successful!");
-      else alert("Booking failed: " + data.message);
+
+      if (data.success) {
+        setMessage("✅ Booking successful!");
+        setService("");
+        setDate("");
+      } else {
+        setMessage("❌ Booking failed: " + data.message);
+      }
     } catch (err) {
-      console.error(err);
-      alert("Error connecting to server");
+      console.error("Booking error:", err);
+      setMessage("❌ Error connecting to server.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleBooking} style={{ maxWidth: "400px", margin: "50px auto" }}>
-      <h2 style={{ textAlign: "center" }}>Book a Service</h2>
+    <form
+      onSubmit={handleBooking}
+      style={{
+        maxWidth: "400px",
+        margin: "50px auto",
+        padding: "20px",
+        border: "1px solid #ccc",
+        borderRadius: "8px"
+      }}
+    >
+      <h2>Book a Service</h2>
       <select
         value={service}
         onChange={(e) => setService(e.target.value)}
@@ -50,6 +82,7 @@ function Booking() {
           <option key={s} value={s}>{s}</option>
         ))}
       </select>
+
       <input
         type="date"
         value={date}
@@ -57,9 +90,27 @@ function Booking() {
         required
         style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
       />
-      <button type="submit" style={{ width: "100%", padding: "10px" }}>
-        Book
+
+      <button
+        type="submit"
+        style={{
+          width: "100%",
+          padding: "10px",
+          backgroundColor: "#007bff",
+          color: "#fff",
+          border: "none",
+          borderRadius: "4px"
+        }}
+        disabled={loading}
+      >
+        {loading ? "Booking..." : "Book"}
       </button>
+
+      {message && (
+        <p style={{ marginTop: "10px", color: message.startsWith("✅") ? "green" : "red" }}>
+          {message}
+        </p>
+      )}
     </form>
   );
 }

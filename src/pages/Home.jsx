@@ -1,8 +1,5 @@
-export default function Home() {
-  return (
-    <div>
-      <h1>Welcome to Spa Booking</h1>
-      <p>Book your next haircut, massage, or nail art with us easily.</p>
-    </div>
-  );
+function Home() {
+  return <h1 style={{ textAlign: "center", marginTop: "50px" }}>Welcome to Spa Booking</h1>;
 }
+
+export default Home;
