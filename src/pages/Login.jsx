@@ -1,34 +1,34 @@
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 
-export default function Login() {
+function Login() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    alert(`Login with: ${email}`);
+    if (!email) return alert("Enter an email");
+
+    localStorage.setItem("userEmail", email);
+    setLoggedIn(true); // triggers redirect
   };
 
+  if (loggedIn) return <Navigate to="/booking" replace />;
+
   return (
-    <div>
-      <h1>Client Login</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-
-        <br />
-
-        <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
-
-        <br />
-
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <form onSubmit={handleLogin}>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter your email"
+        required
+      />
+      <button type="submit">Login</button>
+    </form>
   );
 }
+
+export default Login;
+
+

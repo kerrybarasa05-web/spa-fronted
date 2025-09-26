@@ -1,27 +1,30 @@
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
-import Booking from "./pages/Booking";
 import Login from "./pages/Login";
+import Booking from "./pages/Booking";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <div>
-      {/* Navbar at the top */}
+    <BrowserRouter>
       <Navbar />
-
-      {/* Page content changes based on route */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/booking" element={<Booking />} />
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/booking"
+          element={
+            <ProtectedRoute>
+              <Booking />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-    </div>
+    </BrowserRouter>
   );
 }
 
 export default App;
-
-
